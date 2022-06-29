@@ -53,3 +53,8 @@ print("`parse_raw` method: ", User.parse_raw('{"id": 1, "signup_ts": "2022-06-28
 path = Path("pydantic-tutorial.json")
 path.write_text('{"id": 1, "signup_ts": "2022-06-28 21:29", "friends": [1, 2]}')
 print("`parse_file` method: ", User.parse_file(path))
+print("Schema of user", user.schema())
+print("Schema JSON of user", user.schema_json())
+
+# 如果不希望对数据进行验证，可以使用 construct 方法
+user_data = {"id": "error", "signup_ts": "2022-06-28 21:29", "friends": [1, 2]}
