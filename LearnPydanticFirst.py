@@ -1,8 +1,11 @@
 # coding: utf8
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Optional
 from pathlib import Path
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, constr
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.ext.declarative import declarative_base
 
 """
 Pydantic使用
@@ -20,7 +23,7 @@ class User(BaseModel):
     friends: List[int] = []
 
 
-# 1. Pydantic 基础使用
+# ================== 1. Pydantic 基础使用 ==================
 print("\033[31;31m =============1. Pydantic基础使用============= \033[0m")
 external_data = {
     "id": 123,
@@ -41,7 +44,7 @@ try:
 except ValidationError as e:
     print(e.json())
 
-# 2. 模型类的属性和方法
+# ================== 2. 模型类的属性和方法 ==================
 print("\033[31;31m =============3. 模型类的属性和方法============= \033[0m")
 print("Dict of user: ", user.dict())
 print("Json of user: ", user.json())
@@ -56,5 +59,66 @@ print("`parse_file` method: ", User.parse_file(path))
 print("Schema of user", user.schema())
 print("Schema JSON of user", user.schema_json())
 
-# 如果不希望对数据进行验证，可以使用 construct 方法
+# 如果不希望对数据进行验证，直接创建模型类，可以使用 `construct` 方法，这个方法并不常用
+# 并不会因为传入数据并不符合参数设置而报错
 user_data = {"id": "error", "signup_ts": "2022-06-28 21:29", "friends": [1, 2]}
+print("`construct` method: ", User.construct(**user_data))
+
+# 定义模型类的时候，所有字段都注明类型，字段顺序就不会乱
+print(User.__fields__.keys())
+
+# ================== 3. 递归模型 ==================
+# 两个都继承了 BaseModel 的类，可以互相之间嵌套使用
+print("\033[31;31m =============3. 递归模型============= \033[0m")
+
+
+class Sound(BaseModel):
+    sound: str
+
+
+class Dog(BaseModel):
+    birth: date
+    weight: Optional[float] = None
+    sound: List[Sound]
+
+
+# {"sound": "wang wang"} 中 sound 对应 Sound 类
+dogs = Dog(birth=date.today(), weight=6.66, sound=[{"sound": "wang wang"}, {"sound": "ying ying"}])
+print(dogs.dict())
+
+# ================== 4. ORM模型: 从类实例创建符合 ORM 对象的模型 ==================
+print("\033[31;31m =============4. ORM模型: 从类实例创建符合 ORM 对象的模型============= \033[0m")
+
+Base = declarative_base()
+
+
+class CompanyORM(Base):
+    __tablename__ = "companies"
+    id = Column(Integer, primary_key=True, nullable=False)
+    public_key = Column(String(20), index=True, nullable=False, unique=True)
+    name = Column(String(63), unique=True)
+    domains = Column(ARRAY(String(255)))
+
+
+class CompanyModel(BaseModel):
+    id: int
+    public_key: constr(max_length=20)
+    name: constr(max_length=63)
+    domains: List[constr(max_length=255)]
+
+    class Config:
+        orm_mode = True
+
+
+co_orm = CompanyORM(
+    id=123,
+    public_key="foobar",
+    name="test_orm",
+    domains=["example.com", "imooc.com"]
+)
+print(CompanyModel.from_orm(co_orm))
+
+# ================== 5. Pydantic支持的所有字段类型 ==================
+# Doc URL: https://pydantic-docs.helpmanual.io/usage/types/
+# 非常有必要进一步学习 Pydantic 的完整教程
+print("\033[31;31m =============5. Pydantic支持的所有字段类型============= \033[0m")
