@@ -1,0 +1,21 @@
+# 测试主程序
+
+### 测试参数为 parameters
+
+GET http://127.0.0.1:8000/ch03/path/parameters
+Accept: application/json
+
+### 测试枚举1
+
+GET http://127.0.0.1:8000/ch03/enum/Beijing%20China
+Accept: application/json
+
+### 测试枚举2
+
+GET http://127.0.0.1:8000/ch03/enum/Shanghai%20China
+Accept: application/json
+
+### 测试枚举3
+
+GET http://127.0.0.1:8000/ch03/enum/Shenzhen%20China
+Accept: application/json
