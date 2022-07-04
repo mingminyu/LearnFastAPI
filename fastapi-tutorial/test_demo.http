@@ -1,0 +1,27 @@
+###
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+### 不带查询参数时，query_string 显示为 null
+
+GET http://127.0.0.1:8000/city/shanghai
+Accept: application/json
+
+### 带查询参数时
+
+GET http://127.0.0.1:8000/city/shanghai?query_string=pudong
+Accept: application/json
+
+### 更新数据
+PUT http://127.0.0.1:8000/city/beijing
+Content-Type: application/json
+
+{
+  "province" : "pudong",
+  "country": "china",
+  "is_affected": true
+}
+
+

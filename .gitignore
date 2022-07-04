@@ -346,3 +346,4 @@ dmypy.json
 cython_debug/
 
 pydantic-tutorial.json
+.idea/

@@ -122,3 +122,4 @@ print(CompanyModel.from_orm(co_orm))
 # Doc URL: https://pydantic-docs.helpmanual.io/usage/types/
 # 非常有必要进一步学习 Pydantic 的完整教程
 print("\033[31;31m =============5. Pydantic支持的所有字段类型============= \033[0m")
+print("你可以参考 Pydantic 官网文档: https://pydantic-docs.helpmanual.io/usage/types/")
