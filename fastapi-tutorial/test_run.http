@@ -1,4 +1,4 @@
-# 测试主程序
+# ENDPOINTS测试主程序
 
 ### 测试参数为 parameters
 
@@ -19,3 +19,10 @@ Accept: application/json
 
 GET http://127.0.0.1:8000/ch03/enum/Shenzhen%20China
 Accept: application/json
+
+### bool类型参数
+
+GET http://127.0.0.1:8000/ch03/query/bool/conversion?param=1
+Accept: application/json
+
+
