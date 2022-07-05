@@ -22,7 +22,7 @@ Accept: application/json
 
 ### bool类型参数
 
-GET http://127.0.0.1:8000/ch03/query/bool/conversion?param=1
+GET http://127.0.0.1:8000/ch03/query/bool/conversion?param=yes
 Accept: application/json
 
 
