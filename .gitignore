@@ -347,3 +347,5 @@ cython_debug/
 
 pydantic-tutorial.json
 .idea/
+fastapi-tutorial/bg_test.txt
+*.sqlite3
